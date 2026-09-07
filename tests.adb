@@ -28,6 +28,7 @@ procedure Tests is
    K_Pair : Key_Pair;
    Sig, Sig2 : Signature;
    Result_Val : DSA_Value;
+   pragma Warnings (Off, Result_Val);
    Got_Exception : Boolean;
 
 begin
