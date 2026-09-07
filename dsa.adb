@@ -1,5 +1,3 @@
-with Interfaces;
-
 package body DSA is
 
    -- Use a local 64-bit type to prevent overflow during intermediate multiplications
@@ -7,13 +5,15 @@ package body DSA is
 
    function Mod_Exp (Base, Exponent, Modulus : DSA_Value) return DSA_Value is
       Result : U64 := 1;
-      B      : U64 := U64 (Base) mod U64 (Modulus);
+      B      : U64;
       E      : U64 := U64 (Exponent);
-      M      : U64 := U64 (Modulus);
+      M      : constant U64 := U64 (Modulus);
    begin
       if Modulus = 0 then
          raise Invalid_Parameter_Error with "Modulus cannot be zero";
       end if;
+
+      B := U64 (Base) mod M;
 
       -- Binary exponentiation algorithm
       while E > 0 loop
@@ -33,13 +33,16 @@ package body DSA is
       type Signed_64 is new Interfaces.Integer_64;
       T     : Signed_64 := 0;
       New_T : Signed_64 := 1;
-      R     : Signed_64 := Signed_64 (Modulus);
-      New_R : Signed_64 := Signed_64 (Value mod Modulus);
+      R     : Signed_64;
+      New_R : Signed_64;
       Quotient, Temp : Signed_64;
    begin
       if Modulus = 0 or Value = 0 then
          raise Invalid_Parameter_Error with "Value and Modulus must be positive";
       end if;
+
+      R     := Signed_64 (Modulus);
+      New_R := Signed_64 (Value mod Modulus);
 
       while New_R /= 0 loop
          Quotient := R / New_R;
